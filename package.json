@@ -2,13 +2,12 @@
   "name": "dieta-api",
   "version": "1.0.0",
   "description": "API para controle de dieta diaria",
-  "main": "index.js",
   "scripts": {
     "start": "node ./src/server.js",
     "dev": "nodemon ./src/server.js"
   },
   "keywords": [],
-  "author": "Matheus Dalla Costa, Jonatas Medeiros, Arthur Aguiar",
+  "author": "Matheus Dalla Costa",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.12.1",
