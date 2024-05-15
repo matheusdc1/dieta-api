@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-const { authenticateToken } = require('../middlewares/authenticateToken'); // Importa o middleware de autenticação JWT
+const { authenticateToken } = require('../middlewares/authenticateToken');
 
-// Rota para listar todos os usuários
-router.get('/users', authenticateToken, userController.listUsers); // Aplica o middleware de autenticação JWT
-
-// Rota para criar um novo usuário
+router.get('/users', authenticateToken, userController.listUsers);
 router.post('/users', userController.createUser);
+router.put('/users/:id', authenticateToken, userController.updateUser);
+router.delete('/users/:id', authenticateToken, userController.deleteUser); // Adicionamos esta rota para excluir usuários
 
-// Rota para fazer login
 router.post('/login', userController.login);
 
 module.exports = router;

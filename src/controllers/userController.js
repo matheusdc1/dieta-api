@@ -82,4 +82,60 @@ async function listUsers(req, res) {
   }
 }
 
-module.exports = { createUser, login, listUsers };
+// Função para atualizar um usuário existente
+async function updateUser(req, res) {
+  const userId = req.params.id; // Id do usuário a ser atualizado
+  const { name, email, password } = req.body;
+
+  try {
+    // Verifica se o usuário existe
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId }
+    });
+    if (!existingUser) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    // Atualiza os dados do usuário no banco de dados
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name,
+        email,
+        password // Não se esqueça de lidar com a atualização da senha corretamente
+      }
+    });
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error('Erro ao atualizar usuário:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+}
+
+// Função para excluir um usuário
+async function deleteUser(req, res) {
+  const userId = req.params.id; // Id do usuário a ser excluído
+
+  try {
+    // Verifica se o usuário existe
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId }
+    });
+    if (!existingUser) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    // Exclui o usuário do banco de dados
+    await prisma.user.delete({
+      where: { id: userId }
+    });
+
+    return res.status(200).json({ message: 'Usuário excluído com sucesso' });
+  } catch (error) {
+    console.error('Erro ao excluir usuário:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+}
+
+module.exports = { createUser, login, listUsers, updateUser, deleteUser };
